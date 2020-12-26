@@ -2,9 +2,10 @@ import java.util.Scanner;
 
 public class Login {
     public static void main(String[] args) {
+        boolean flag = true;
         User users[] = load();
         Scanner sc = new Scanner(System.in);
-        while (true) {
+        while (flag) {
             System.out.print("请输入用户名：");
             String username = sc.next();
             System.out.print("请输入密码：");
@@ -12,18 +13,22 @@ public class Login {
 
             for (User u : users) {
                 if (username.equals(u.getUsername()) && password.equals(u.getPassword())) {
-                    System.out.println("登录成功");
+                    flag = false;
                     break;
-                } else {
-                    System.out.println("您的用户名密码不正确，请重新输入");
                 }
+            }
+
+            if (!flag){
+                System.out.println("登录成功");
+            }else {
+                System.out.println("您的用户名密码不正确，请重新输入");
             }
         }
     }
 
     public static User[] load(){
         ControlExcel controlExcel  =new ControlExcel();
-        return controlExcel.readExcel("src/Users.xlsx");
+        return controlExcel.readExcel("Users.xlsx");
     }
 
 
