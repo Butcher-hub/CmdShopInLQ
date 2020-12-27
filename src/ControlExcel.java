@@ -8,6 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.net.URL;
 
 public class ControlExcel {
 
@@ -32,14 +33,16 @@ public class ControlExcel {
     /**
      * 读取Excel的方法
      * @param url 文件路径
+     * @param
      * @return 用户数组
      */
-    public User[] readExcel(String url) {
-        File file = new File(url);
+    public User[] readUserExcel(String url) {
+        FileInputStream fis;
 //        声明一个用户数值
         User users[] = null;
         try {
-            XSSFWorkbook xw = new XSSFWorkbook(new FileInputStream(file));
+            fis = new FileInputStream(new File(url));
+            XSSFWorkbook xw = new XSSFWorkbook(fis);
             //获取工作表
             XSSFSheet xs = xw.getSheetAt(0);
             //获取有数据的行数
@@ -50,6 +53,7 @@ public class ControlExcel {
                 User user = new User();
                 for (int k = 0; k <= row.getLastCellNum(); k++) {
                     XSSFCell cell = row.getCell(k);
+
                     if (cell == null)
                         continue;
                     if (k == 0) {
@@ -64,10 +68,80 @@ public class ControlExcel {
                     users[j-1]=user;
                 }
             }
+            fis.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return users;
+    }
+
+    public Product [] readProductExcel(String url) {
+//        声明一个用户数值
+       FileInputStream fis;
+        Product products[] = null;
+        try {
+            fis = new FileInputStream(new File(url));
+            XSSFWorkbook xw = new XSSFWorkbook(fis);
+            //获取工作表
+            XSSFSheet xs = xw.getSheetAt(0);
+            //获取有数据的行数
+            products = new Product[xs.getLastRowNum()];
+
+            for (int j = 1; j <= xs.getLastRowNum(); j++) {
+                XSSFRow row = xs.getRow(j);
+                Product product = new Product();
+                for (int k = 0; k <= row.getLastCellNum(); k++) {
+                    XSSFCell cell = row.getCell(k);
+                    if (cell == null)
+                        continue;
+                    if (k == 0) {
+                        product.setPid(this.getValue(cell));
+                    } else if (k == 1) {
+                        product.setPname(this.getValue(cell));
+                    } else if (k == 2) {
+                        product.setPprice(this.getValue(cell));
+                    } else if (k == 3) {
+                        product.setPcount(this.getValue(cell));
+                    }
+                    products[j-1]=product;
+                }
+            }
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+    public void buy(String id,int num){
+        try {
+            FileInputStream fis = new FileInputStream(new File("product.xlsx"));
+
+            XSSFWorkbook xw = new XSSFWorkbook(fis);
+            //获取工作表
+            XSSFSheet xs = xw.getSheetAt(0);
+            //获取有数据的行数
+            for (int j = 1; j <= xs.getLastRowNum(); j++) {
+                XSSFRow row = xs.getRow(j);
+                if (this.getValue(row.getCell(0)).equals(id)){
+                    XSSFCell cell = row.getCell(3);
+                    int count = Integer.parseInt(this.getValue(cell));
+                    count-=num;
+                    if(count<=0){
+                        System.out.println("对不起！您购买的商品库存不足！请减少购买量");
+                    }
+                    cell.setCellValue(count);
+                    System.out.println(row.getCell(1).getStringCellValue()+"购买成功！");
+                }
+
+            }
+            fis.close();
+            FileOutputStream fos = new FileOutputStream(new File("product.xlsx"));
+            xw.write(fos);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private String getValue(XSSFCell cell) {
@@ -85,7 +159,8 @@ public class ControlExcel {
                 value = cell.getBooleanCellValue() + "";
                 break;
             case NUMERIC:
-                value = cell.getNumericCellValue() + "";
+                value = cell.getNumericCellValue()+"";
+                value=value.substring(0,value.indexOf("."));
                 break;
             case FORMULA:
                 value = cell.getCellFormula();
