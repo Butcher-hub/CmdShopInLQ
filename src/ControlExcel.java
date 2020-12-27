@@ -139,7 +139,7 @@ public class ControlExcel {
                         System.out.println("对不起！您购买的商品库存不足！请减少购买量");
                         return;
                     }
-                    changeMoney(name ,Integer.parseInt(getValue(row.getCell(2))));
+                    changeMoney(name ,Integer.parseInt(getValue(row.getCell(2))),num);
                     cell.setCellValue(count);
                     System.out.println(row.getCell(1).getStringCellValue()+"购买成功！");
                 }
@@ -155,7 +155,7 @@ public class ControlExcel {
     }
 
 
-    public static void changeMoney(String name,int cost){
+    public static void changeMoney(String name,int cost,int num){
         try {
             FileInputStream fis = new FileInputStream(new File("Users.xlsx"));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
@@ -167,7 +167,7 @@ public class ControlExcel {
                 if (getValue(row.getCell(0)).equals(name)){
                     XSSFCell cell = row.getCell(4);
                     int money = Integer.parseInt(getValue(cell));
-                    money-=cost;
+                    money-=(cost*num);
                     if(money<=0){
                         System.out.println("对不起！您余额不足。。。");
                     }
