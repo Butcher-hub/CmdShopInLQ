@@ -9,8 +9,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 import java.net.URL;
+import java.text.DecimalFormat;
 
 public class ControlExcel {
+
+
+    User users[] = null;
+    Product products[] = null;
+
 
     /**
      * 创建Excel的方法
@@ -39,7 +45,7 @@ public class ControlExcel {
     public User[] readUserExcel(String url) {
         FileInputStream fis;
 //        声明一个用户数值
-        User users[] = null;
+
         try {
             fis = new FileInputStream(new File(url));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
@@ -59,11 +65,13 @@ public class ControlExcel {
                     if (k == 0) {
                         user.setUsername(this.getValue(cell));
                     } else if (k == 1) {
-                        user.setPasswrod(this.getValue(cell));
+                        user.setPassword(this.getValue(cell));
                     } else if (k == 2) {
                         user.setAddress(this.getValue(cell));
                     } else if (k == 3) {
                         user.setPhone(this.getValue(cell));
+                    }else if(k == 4){
+                        user.setMoney(this.getValue(cell));
                     }
                     users[j-1]=user;
                 }
@@ -78,7 +86,7 @@ public class ControlExcel {
     public Product [] readProductExcel(String url) {
 //        声明一个用户数值
        FileInputStream fis;
-        Product products[] = null;
+
         try {
             fis = new FileInputStream(new File(url));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
@@ -113,10 +121,9 @@ public class ControlExcel {
         return products;
     }
 
-    public void buy(String id,int num){
+    public void buy(String id,int num,String name){
         try {
             FileInputStream fis = new FileInputStream(new File("product.xlsx"));
-
             XSSFWorkbook xw = new XSSFWorkbook(fis);
             //获取工作表
             XSSFSheet xs = xw.getSheetAt(0);
@@ -127,9 +134,12 @@ public class ControlExcel {
                     XSSFCell cell = row.getCell(3);
                     int count = Integer.parseInt(this.getValue(cell));
                     count-=num;
+
                     if(count<=0){
                         System.out.println("对不起！您购买的商品库存不足！请减少购买量");
+                        return;
                     }
+                    changeMoney(name ,Integer.parseInt(getValue(row.getCell(2))));
                     cell.setCellValue(count);
                     System.out.println(row.getCell(1).getStringCellValue()+"购买成功！");
                 }
@@ -144,7 +154,45 @@ public class ControlExcel {
         }
     }
 
-    private String getValue(XSSFCell cell) {
+
+    public static void changeMoney(String name,int cost){
+        try {
+            FileInputStream fis = new FileInputStream(new File("Users.xlsx"));
+            XSSFWorkbook xw = new XSSFWorkbook(fis);
+            //获取工作表
+            XSSFSheet xs = xw.getSheetAt(0);
+            //获取有数据的行数
+            for (int j = 1; j <= xs.getLastRowNum(); j++) {
+                XSSFRow row = xs.getRow(j);
+                if (getValue(row.getCell(0)).equals(name)){
+                    XSSFCell cell = row.getCell(4);
+                    int money = Integer.parseInt(getValue(cell));
+                    money-=cost;
+                    if(money<=0){
+                        System.out.println("对不起！您余额不足。。。");
+                    }
+                    cell.setCellValue(money);
+                    System.out.println("交易成功");
+                    System.out.println("您的信息:");
+                    System.out.println("姓名："+row.getCell(0).getStringCellValue());
+                    System.out.println("地址："+row.getCell(2).getStringCellValue());
+                    System.out.println("电话："+getValue(row.getCell(3)));
+                    System.out.println("余额："+row.getCell(4).getNumericCellValue());
+                }
+
+            }
+            fis.close();
+            FileOutputStream fos = new FileOutputStream(new File("Users.xlsx"));
+            xw.write(fos);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    private static String getValue(XSSFCell cell) {
         String value;
         CellType type = cell.getCellTypeEnum();
 
@@ -159,8 +207,8 @@ public class ControlExcel {
                 value = cell.getBooleanCellValue() + "";
                 break;
             case NUMERIC:
-                value = cell.getNumericCellValue()+"";
-                value=value.substring(0,value.indexOf("."));
+                DecimalFormat df = new DecimalFormat("#");
+                value = df.format(cell.getNumericCellValue());
                 break;
             case FORMULA:
                 value = cell.getCellFormula();

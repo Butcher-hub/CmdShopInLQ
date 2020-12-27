@@ -1,8 +1,10 @@
 public class User {
     private String username;
-    private String passwrod;
+    private String password;
     private String address;
     private String phone;
+    private String money;
+
 
     public String getUsername() {
         return username;
@@ -13,11 +15,19 @@ public class User {
     }
 
     public String getPassword() {
-        return passwrod;
+        return password;
     }
 
-    public void setPasswrod(String passwrod) {
-        this.passwrod = passwrod;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getMoney() {
+        return money;
+    }
+
+    public void setMoney(String money) {
+        this.money = money;
     }
 
     public String getAddress() {
