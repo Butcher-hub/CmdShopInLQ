@@ -36,11 +36,15 @@ public class ControlExcel {
      */
     public User[] readExcel(String url) {
         File file = new File(url);
+//        声明一个用户数值
         User users[] = null;
         try {
             XSSFWorkbook xw = new XSSFWorkbook(new FileInputStream(file));
+            //获取工作表
             XSSFSheet xs = xw.getSheetAt(0);
+            //获取有数据的行数
             users = new User[xs.getLastRowNum()];
+
             for (int j = 1; j <= xs.getLastRowNum(); j++) {
                 XSSFRow row = xs.getRow(j);
                 User user = new User();
