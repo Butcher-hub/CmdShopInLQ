@@ -8,7 +8,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
-import java.net.URL;
 import java.text.DecimalFormat;
 
 public class ControlExcel {
@@ -135,14 +134,15 @@ public class ControlExcel {
                     int count = Integer.parseInt(this.getValue(cell));
                     count-=num;
 
-                    if(count<=0){
+                    if(count<0){
                         System.out.println("对不起！您购买的商品库存不足！请减少购买量");
                         return;
                     }
                     cell.setCellValue(count);
-                    System.out.println("商品信息已更新！");
+
                 }
             }
+            System.out.println("商品信息已更新！");
             fis.close();
             FileOutputStream fos = new FileOutputStream(new File("product.xlsx"));
             xw.write(fos);

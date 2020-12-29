@@ -22,6 +22,7 @@ public class Login {
             for (User u : users) {
                 if (username.equals(u.getUsername()) && password.equals(u.getPassword())) {
                     flag = false;
+                    System.out.println("您的账户余额为："+u.getMoney());
                     user=u;//用户初始化
                     break;
                 }

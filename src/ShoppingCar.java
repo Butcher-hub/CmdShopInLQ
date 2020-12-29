@@ -19,10 +19,13 @@ public class ShoppingCar {
     }
 
     public void add(Product product,int count){
-        for (Product p:blank) {
-            if (p==null){
-                p=product;
-                p.setUcount(count);
+        for (int i = 0; i<this.blank.length;i++) {
+            if (blank[i]==null){
+                blank[i]=product;
+                blank[i].setUcount(count);
+                amount += blank[i].getPprice()*count;
+                this.count += count;
+                return;
             }
         }
     }
@@ -31,13 +34,25 @@ public class ShoppingCar {
      显示购物车中的商品
      */
     public void showList(){
+        System.out.println("--------------------------------------");
         for (Product p:blank) {
+            if(p==null){
+                break;
+            }
             System.out.printf("|%-6s|%-6s|%-6s|%-6s|%-6s|\n",p.getPid(),p.getPname(),p.getPprice(),p.getPcount(),p.getUcount());
-            count+=p.getPcount();
-            amount+=p.getPprice();
+
         }
-        System.out.println("------------------------------");
+        System.out.println("--------------------------------------");
         System.out.println("数量总计："+count+"       "+"金额总计："+amount);
+    }
+
+    public void freeIt(){
+        for (Product p : blank) {
+            if (p!=null){
+                p=null;
+            }
+        }
+        System.out.println("购物车已经清空了");
     }
 
     public int getCount() {

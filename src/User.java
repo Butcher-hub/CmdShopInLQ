@@ -10,7 +10,7 @@ public class User {
      * @param product
      */
     public void buy(Product product,int count){
-        if(money>= product.getPprice()){
+        if(money< product.getPprice()){
             System.out.println("你钱不够，无法购买"+product.getPname());
             return;
         }
@@ -21,7 +21,7 @@ public class User {
      * 用户查看购物车
      */
     public void checkSC(){
-        if (shoppingCar.getBlank()==null){
+        if (shoppingCar.getBlank()[0]==null){
             System.out.println("您的购物车空空如也！");
             return;
         }
@@ -29,11 +29,20 @@ public class User {
     }
 
     public void pay(){
+        if (shoppingCar.getAmount()==0){
+            System.out.println("你没有买东西哦，先去买点吧！");
+            return;
+        }
         ControlExcel controlExcel = new ControlExcel();
         controlExcel.changeMoney(username,shoppingCar.getAmount());
         System.out.println("付款成功");
         for (Product p:shoppingCar.getBlank()) {
-            controlExcel.changeProduct(p.getPname(),p.getPcount());
+            if(p==null){
+                //清空购物车
+                shoppingCar.freeIt();
+                return;
+            }
+            controlExcel.changeProduct(p.getPid(),p.getUcount());
         }
     }
 

@@ -24,18 +24,27 @@ public class Shop {
                 System.out.println("期待您的下次光临！");
                 break;
             }else if (control==1){
+                showProduct(shop.products);
                 System.out.print("请输入您要购买的商品id:");
                 int id = sc.nextInt();
+                boolean flag = false;
                 for (Product p:shop.products) {
+                    if(p==null){
+                        continue;
+                    }
                     if (p.getPid().equals(new Integer(id).toString())){
                         //找到商品
                         System.out.print("你要买多少个"+p.getPname()+":");
                         int count = sc.nextInt();
                         login.getUser().buy(p,count);
-                        showProduct(shop.products);
-                    }else {
-                        System.out.println("此商品不存在！");
+                        p.setPcount(p.getPcount()-count);
+                        System.out.println(p.getPname()+"已经加入购物车了哦");
+                        flag=true;
+                        break;
                     }
+                }
+                if (!flag){
+                    System.out.println("此商品不存在！");
                 }
             }else if (control==2){
                 login.getUser().checkSC();
