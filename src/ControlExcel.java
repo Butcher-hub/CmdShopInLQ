@@ -188,6 +188,38 @@ public class ControlExcel {
     }
 
 
+    public  void addOrder(String name,String phone,String adsress,Product [] products){
+        try {
+            FileInputStream fis = new FileInputStream(new File("order.xlsx"));
+            XSSFWorkbook xw = new XSSFWorkbook(fis);
+            //获取工作表
+            XSSFSheet xs = xw.getSheetAt(0);
+            //获取有数据的行数并创建行
+
+            for (int i = 0; i < 5; i++) {
+                XSSFRow row = xs.createRow(xs.getLastRowNum()+i);
+                for (int j = 0;j<3;j++){
+                    XSSFCell cell = row.createCell(j);
+                    if (i==0){
+                        cell.setCellValue("订单编号");
+                    }
+                }
+            }
+
+            for (int j =  xs.getLastRowNum(); j <=products.length+ xs.getLastRowNum() ; j++) {
+                XSSFRow row = xs.createRow(j);
+
+
+
+            }
+            fis.close();
+            FileOutputStream fos = new FileOutputStream(new File("order.xlsx"));
+            xw.write(fos);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static String getValue(XSSFCell cell) {
         String value;

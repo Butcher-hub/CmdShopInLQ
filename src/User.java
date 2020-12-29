@@ -36,6 +36,7 @@ public class User {
         ControlExcel controlExcel = new ControlExcel();
         controlExcel.changeMoney(username,shoppingCar.getAmount());
         System.out.println("付款成功");
+
         for (Product p:shoppingCar.getBlank()) {
             if(p==null){
                 //清空购物车
@@ -43,6 +44,7 @@ public class User {
                 return;
             }
             controlExcel.changeProduct(p.getPid(),p.getUcount());
+            controlExcel.addOrder(username,phone,address,shoppingCar.getBlank());
         }
     }
 
