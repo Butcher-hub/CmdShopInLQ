@@ -27,8 +27,8 @@ public class ShoppingCar {
         }
     }
 
-    /**
-     * 显示购物车中的商品
+    /*
+     显示购物车中的商品
      */
     public void showList(){
         for (Product p:blank) {
