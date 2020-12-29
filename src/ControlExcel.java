@@ -200,18 +200,32 @@ public class ControlExcel {
                 XSSFRow row = xs.createRow(xs.getLastRowNum()+i);
                 for (int j = 0;j<3;j++){
                     XSSFCell cell = row.createCell(j);
-                    if (i==0){
+                    if (i==0&&j==0){
                         cell.setCellValue("订单编号");
+                    }else if (i==0&&j==1){
+                        cell.setCellValue(11111);
+                    }else if (i==1&&j==0){
+                        cell.setCellValue("客户姓名");
+                    }else if (i==1&&j==1){
+                        cell.setCellValue("电话");
+                    }else if (i==1&&j==2){
+                        cell.setCellValue("发货地址");
+                    }else if (i==3&&j==0){
+                        cell.setCellValue("商品");
+                    }else if (i==3&&j==1){
+                        cell.setCellValue("数量");
+                    }else if (i==3&&j==2){
+                        cell.setCellValue("价格");
                     }
                 }
             }
 
-            for (int j =  xs.getLastRowNum(); j <=products.length+ xs.getLastRowNum() ; j++) {
+            /*for (int j =  xs.getLastRowNum(); j <=products.length+ xs.getLastRowNum() ; j++) {
                 XSSFRow row = xs.createRow(j);
 
 
 
-            }
+            }*/
             fis.close();
             FileOutputStream fos = new FileOutputStream(new File("order.xlsx"));
             xw.write(fos);

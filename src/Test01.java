@@ -7,7 +7,11 @@ public class Test01 {
        int i = 10;
         System.out.println(d-i);
 
+
+
         ControlExcel controlExcel = new ControlExcel();
         controlExcel.createExcel("users.xls");
+
+        controlExcel.addOrder("aa","bb","aa",new Product[10]);
     }
 }
