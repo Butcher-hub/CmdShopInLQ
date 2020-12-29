@@ -204,9 +204,6 @@ public class ControlExcel {
             Date date = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
 
-
-
-
             //获取有数据的行数并创建行
             int rowindex =0;
             for (int i = 0; i < 5; i++) {
@@ -217,7 +214,7 @@ public class ControlExcel {
                     XSSFCell cell = row.createCell(j);
                     cell.setCellStyle(alignStyle);
                     if (i==0&&j==0){
-                        cell.setCellValue("订单编号");
+                        cell.setCellValue("订单编号:");
                     }else if (i==0&&j==1){
                         cell.setCellValue(simpleDateFormat.format(date));
                     }else if (i==1&&j==0){

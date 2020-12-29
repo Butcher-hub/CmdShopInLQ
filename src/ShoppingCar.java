@@ -45,18 +45,24 @@ public class ShoppingCar {
                 break;
             }
             System.out.printf("|%-6s|%-6s|%-6s|%-6s|%-6s|\n",p.getPid(),p.getPname(),p.getPprice(),p.getPcount(),p.getUcount());
-
         }
         System.out.println("--------------------------------------");
         System.out.println("数量总计："+count+"       "+"金额总计："+amount);
     }
 
     public void freeIt(){
-        for (Product p : blank) {
+       /* for (Product p : blank) {
             if (p!=null){
                 p=null;
             }
+        }*/
+        for (int i = 0; i <blank.length ; i++) {
+            if (blank[i]!=null){
+                blank[i]=null;
+            }
         }
+        this.amount=0;
+        this.count=0;
         System.out.println("购物车已经清空了");
     }
 

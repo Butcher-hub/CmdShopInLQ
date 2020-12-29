@@ -30,7 +30,7 @@ public class User {
 
     public void pay(){
         if (shoppingCar.getAmount()==0){
-            System.out.println("你没有买东西哦，先去买点吧！");
+            System.out.println("你购物车没有东西哦，先去买点吧！");
             return;
         }
         ControlExcel controlExcel = new ControlExcel();
@@ -41,11 +41,11 @@ public class User {
             if(p==null){
                 //清空购物车
                 shoppingCar.freeIt();
-                return;
+                break;
             }
             controlExcel.changeProduct(p.getPid(),p.getUcount());
-            controlExcel.addOrder(username,phone,address,shoppingCar.getBlank(),shoppingCar.getCount(),shoppingCar.getAmount());
         }
+        controlExcel.addOrder(username,phone,address,shoppingCar.getBlank(),shoppingCar.getCount(),shoppingCar.getAmount());
         System.out.println("商品信息已更新！订单生成完毕！");
     }
 

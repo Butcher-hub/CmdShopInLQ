@@ -18,7 +18,7 @@ public class Shop {
         Scanner sc = new Scanner(System.in);
         showProduct(shop.products);
         while(true) {
-            System.out.print("请输入1购买商品,输入2查看购物车,输入3结算,输入0退出购买");
+            System.out.print("请输入1购买商品,输入2查看购物车,输入3结算,输入0退出购买:");
             int control = sc.nextInt();
             if (control==0){
                 System.out.println("期待您的下次光临！");
