@@ -5,8 +5,17 @@
 public class Product {
     private String Pid;
     private String Pname;
-    private String Pprice;
-    private String Pcount;
+    private double Pprice;
+    private int Pcount;
+    private int Ucount;
+
+    public int getUcount() {
+        return Ucount;
+    }
+
+    public void setUcount(int ucount) {
+        Ucount = ucount;
+    }
 
     public String getPid() {
         return Pid;
@@ -24,19 +33,19 @@ public class Product {
         Pname = pname;
     }
 
-    public String getPprice() {
+    public double getPprice() {
         return Pprice;
     }
 
-    public void setPprice(String pprice) {
+    public void setPprice(double pprice) {
         Pprice = pprice;
     }
 
-    public String getPcount() {
+    public int getPcount() {
         return Pcount;
     }
 
-    public void setPcount(String pcount) {
+    public void setPcount(int pcount) {
         Pcount = pcount;
     }
 }

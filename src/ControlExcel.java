@@ -71,7 +71,7 @@ public class ControlExcel {
                     } else if (k == 3) {
                         user.setPhone(this.getValue(cell));
                     }else if(k == 4){
-                        user.setMoney(this.getValue(cell));
+                        user.setMoney(Double.parseDouble(this.getValue(cell)));
                     }
                     users[j-1]=user;
                 }
@@ -107,9 +107,9 @@ public class ControlExcel {
                     } else if (k == 1) {
                         product.setPname(this.getValue(cell));
                     } else if (k == 2) {
-                        product.setPprice(this.getValue(cell));
+                        product.setPprice(Double.parseDouble(this.getValue(cell)));
                     } else if (k == 3) {
-                        product.setPcount(this.getValue(cell));
+                        product.setPcount(Integer.parseInt(this.getValue(cell)));
                     }
                     products[j-1]=product;
                 }
@@ -121,7 +121,7 @@ public class ControlExcel {
         return products;
     }
 
-    public void buy(String id,int num,String name){
+    public void changeProduct(String id,int num){
         try {
             FileInputStream fis = new FileInputStream(new File("product.xlsx"));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
@@ -139,11 +139,9 @@ public class ControlExcel {
                         System.out.println("对不起！您购买的商品库存不足！请减少购买量");
                         return;
                     }
-                    changeMoney(name ,Integer.parseInt(getValue(row.getCell(2))),num);
                     cell.setCellValue(count);
-                    System.out.println(row.getCell(1).getStringCellValue()+"购买成功！");
+                    System.out.println("商品信息已更新！");
                 }
-
             }
             fis.close();
             FileOutputStream fos = new FileOutputStream(new File("product.xlsx"));
@@ -154,8 +152,7 @@ public class ControlExcel {
         }
     }
 
-
-    public static void changeMoney(String name,int cost,int num){
+    public  void changeMoney(String name,int cost){
         try {
             FileInputStream fis = new FileInputStream(new File("Users.xlsx"));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
@@ -167,7 +164,7 @@ public class ControlExcel {
                 if (getValue(row.getCell(0)).equals(name)){
                     XSSFCell cell = row.getCell(4);
                     int money = Integer.parseInt(getValue(cell));
-                    money-=(cost*num);
+                    money-=cost;
                     if(money<=0){
                         System.out.println("对不起！您余额不足。。。");
                     }

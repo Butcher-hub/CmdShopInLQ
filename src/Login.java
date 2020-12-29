@@ -2,10 +2,10 @@ import java.util.Scanner;
 
 public class Login {
 
-    private String name;
+    private User user;
 
-    public String getName() {
-        return name;
+    public User getUser() {
+        return user;
     }
 
     public void login()  {
@@ -16,17 +16,19 @@ public class Login {
         while (flag) {
             System.out.print("请输入用户名：");
             String username = sc.next();
-            this.name = username;
+
             System.out.print("请输入密码：");
             String password = sc.next();
             for (User u : users) {
                 if (username.equals(u.getUsername()) && password.equals(u.getPassword())) {
                     flag = false;
+                    user=u;//用户初始化
                     break;
                 }
             }
             if (!flag){
                 System.out.println("登录成功");
+
                 break;
             }else {
                 System.out.println("您的用户名密码不正确，请重新输入");

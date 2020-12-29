@@ -3,7 +3,40 @@ public class User {
     private String password;
     private String address;
     private String phone;
-    private String money;
+    private double money;
+    ShoppingCar shoppingCar = new ShoppingCar(10);
+    /**
+     * 用户购买行为
+     * @param product
+     */
+    public void buy(Product product,int count){
+        if(money>= product.getPprice()){
+            System.out.println("你钱不够，无法购买"+product.getPname());
+            return;
+        }
+        shoppingCar.add(product,count);
+    }
+
+    /**
+     * 用户查看购物车
+     */
+    public void checkSC(){
+        if (shoppingCar.getBlank()==null){
+            System.out.println("您的购物车空空如也！");
+            return;
+        }
+        shoppingCar.showList();
+    }
+
+    public void pay(){
+        ControlExcel controlExcel = new ControlExcel();
+        controlExcel.changeMoney(username,shoppingCar.getAmount());
+        System.out.println("付款成功");
+        for (Product p:shoppingCar.getBlank()) {
+            controlExcel.changeProduct(p.getPname(),p.getPcount());
+        }
+    }
+
 
 
     public String getUsername() {
@@ -22,11 +55,11 @@ public class User {
         this.password = password;
     }
 
-    public String getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(String money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 

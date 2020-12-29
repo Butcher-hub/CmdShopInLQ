@@ -5,24 +5,45 @@ import java.util.Scanner;
  * @Date: 2020/12/27/16:00
  */
 public class Shop {
+    Product [] products;
+
+
     public static void main(String[] args) {
+        Shop shop = new Shop();
         Login login = new Login();
-        login.login();
+        login.login();//用户已产生
         ControlExcel controlExcel  =new ControlExcel();
-        Product [] products  = controlExcel.readProductExcel("product.xlsx");
+        shop.products  = controlExcel.readProductExcel("product.xlsx");
+
         Scanner sc = new Scanner(System.in);
-        showProduct(products);
+        showProduct(shop.products);
         while(true) {
-            System.out.print("请输入您要购买的商品id或输入0退出购买:");
-            int id = sc.nextInt();
-            if (id==0){
+            System.out.print("请输入1购买商品,输入2查看购物车,输入3结算,输入0退出购买");
+            int control = sc.nextInt();
+            if (control==0){
                 System.out.println("期待您的下次光临！");
                 break;
+            }else if (control==1){
+                System.out.print("请输入您要购买的商品id:");
+                int id = sc.nextInt();
+                for (Product p:shop.products) {
+                    if (p.getPid().equals(new Integer(id).toString())){
+                        //找到商品
+                        System.out.print("你要买多少个"+p.getPname()+":");
+                        int count = sc.nextInt();
+                        login.getUser().buy(p,count);
+                        showProduct(shop.products);
+                    }else {
+                        System.out.println("此商品不存在！");
+                    }
+                }
+            }else if (control==2){
+                login.getUser().checkSC();
+            }else if (control==3){
+                login.getUser().pay();
+            }else{
+                System.out.println("您的输入有误");
             }
-            System.out.print("请输入您要购买的商品的数量:");
-            int num = sc.nextInt();
-            controlExcel.buy(new Integer(id).toString(),num,login.getName());
-            showProduct(controlExcel.readProductExcel("product.xlsx"));
         }
     }
     public static void showProduct(Product [] products){
@@ -35,6 +56,8 @@ public class Shop {
         }
         System.out.println("|-----------------------------|");
     }
+
+
 
 
 
