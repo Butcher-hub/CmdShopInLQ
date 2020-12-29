@@ -13,6 +13,7 @@ public class Login {
         ControlExcel controlExcel  =new ControlExcel();
         User users[] = controlExcel.readUserExcel("Users.xlsx");
         Scanner sc = new Scanner(System.in);
+        System.out.println("欢迎光临小店！先登录吧！");
         while (flag) {
             System.out.print("请输入用户名：");
             String username = sc.next();

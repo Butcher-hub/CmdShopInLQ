@@ -26,6 +26,11 @@ public class ShoppingCar {
                 amount += blank[i].getPprice()*count;
                 this.count += count;
                 return;
+            }else if(product.getPname().equals(blank[i].getPname())){
+                blank[i].setUcount(blank[i].getUcount()+count);
+                amount += blank[i].getPprice()*count;
+                this.count += count;
+                return;
             }
         }
     }

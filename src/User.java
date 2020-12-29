@@ -44,8 +44,9 @@ public class User {
                 return;
             }
             controlExcel.changeProduct(p.getPid(),p.getUcount());
-            controlExcel.addOrder(username,phone,address,shoppingCar.getBlank());
+            controlExcel.addOrder(username,phone,address,shoppingCar.getBlank(),shoppingCar.getCount(),shoppingCar.getAmount());
         }
+        System.out.println("商品信息已更新！订单生成完毕！");
     }
 
 

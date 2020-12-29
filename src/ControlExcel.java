@@ -1,14 +1,15 @@
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 
 import java.io.*;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ControlExcel {
 
@@ -135,14 +136,14 @@ public class ControlExcel {
                     count-=num;
 
                     if(count<0){
-                        System.out.println("对不起！您购买的商品库存不足！请减少购买量");
+                        System.out.println("对不起！您购买的"+this.getValue(row.getCell(1))+"库存不足！请减少购买量");
                         return;
                     }
                     cell.setCellValue(count);
 
                 }
             }
-            System.out.println("商品信息已更新！");
+
             fis.close();
             FileOutputStream fos = new FileOutputStream(new File("product.xlsx"));
             xw.write(fos);
@@ -188,28 +189,50 @@ public class ControlExcel {
     }
 
 
-    public  void addOrder(String name,String phone,String adsress,Product [] products){
+    public  void addOrder(String name,String phone,String adsress,Product [] products,int count,double amount){
         try {
             FileInputStream fis = new FileInputStream(new File("order.xlsx"));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
+
+            XSSFCellStyle alignStyle = (XSSFCellStyle) xw.createCellStyle();
+            alignStyle.setAlignment(HorizontalAlignment.CENTER);//水平居中
+
+
             //获取工作表
             XSSFSheet xs = xw.getSheetAt(0);
-            //获取有数据的行数并创建行
 
+            Date date = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
+
+
+
+
+            //获取有数据的行数并创建行
+            int rowindex =0;
             for (int i = 0; i < 5; i++) {
-                XSSFRow row = xs.createRow(xs.getLastRowNum()+i);
+                rowindex =xs.getLastRowNum()+1;
+
+                XSSFRow row = xs.createRow(rowindex);
                 for (int j = 0;j<3;j++){
                     XSSFCell cell = row.createCell(j);
+                    cell.setCellStyle(alignStyle);
                     if (i==0&&j==0){
                         cell.setCellValue("订单编号");
                     }else if (i==0&&j==1){
-                        cell.setCellValue(11111);
+                        cell.setCellValue(simpleDateFormat.format(date));
                     }else if (i==1&&j==0){
                         cell.setCellValue("客户姓名");
+
                     }else if (i==1&&j==1){
                         cell.setCellValue("电话");
                     }else if (i==1&&j==2){
                         cell.setCellValue("发货地址");
+                    }else if (i==2&&j==0){
+                        cell.setCellValue(name);
+                    }else if (i==2&&j==1){
+                        cell.setCellValue(phone);
+                    }else if (i==2&&j==2){
+                        cell.setCellValue(adsress);
                     }else if (i==3&&j==0){
                         cell.setCellValue("商品");
                     }else if (i==3&&j==1){
@@ -219,13 +242,41 @@ public class ControlExcel {
                     }
                 }
             }
+//                模板生成完毕，导入商品数据
+            for (int j =0; j <products.length ; j++) {
+                if (products[j]==null){
+                    break;
+                }
+                XSSFRow row = xs.createRow(rowindex++);
 
-            /*for (int j =  xs.getLastRowNum(); j <=products.length+ xs.getLastRowNum() ; j++) {
-                XSSFRow row = xs.createRow(j);
+                for (int i = 0; i <3 ; i++) {
+                    XSSFCell cell = row.createCell(i);
+                    cell.setCellStyle(alignStyle);
+                    if (i==0){
+                        cell.setCellValue(products[j].getPname());
+                    }else if(i==1){
+                        cell.setCellValue(products[j].getUcount());
+                    }else if(i==2){
+                        cell.setCellValue(products[j].getPprice());
+                    }
+                }
+            }
+            XSSFRow row1 = xs.createRow(rowindex++);
+            XSSFCell cell1 = row1.createCell(0);
+            XSSFCell cell2 = row1.createCell(1);
+            XSSFCell cell3 = row1.createCell(2);
+            cell1.setCellStyle(alignStyle);
+            cell1.setCellValue("总计：");
+            cell2.setCellValue(count);
+            cell2.setCellStyle(alignStyle);
+            cell3.setCellValue(amount);
+            cell3.setCellStyle(alignStyle);
 
 
-
-            }*/
+            XSSFRow row = xs.createRow(rowindex++);
+            for (int i = 0; i <3 ; i++) {
+                row.createCell(i).setCellValue("--------------------");
+            }
             fis.close();
             FileOutputStream fos = new FileOutputStream(new File("order.xlsx"));
             xw.write(fos);
