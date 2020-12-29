@@ -39,14 +39,15 @@ public class User {
 
         for (Product p:shoppingCar.getBlank()) {
             if(p==null){
+                controlExcel.addOrder(username,phone,address,shoppingCar.getBlank(),shoppingCar.getCount(),shoppingCar.getAmount());
+                System.out.println("商品信息已更新！订单生成完毕！");
                 //清空购物车
                 shoppingCar.freeIt();
                 break;
             }
             controlExcel.changeProduct(p.getPid(),p.getUcount());
         }
-        controlExcel.addOrder(username,phone,address,shoppingCar.getBlank(),shoppingCar.getCount(),shoppingCar.getAmount());
-        System.out.println("商品信息已更新！订单生成完毕！");
+
     }
 
 
