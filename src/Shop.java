@@ -18,7 +18,7 @@ public class Shop {
         Scanner sc = new Scanner(System.in);
         showProduct(shop.products);
         while(true) {
-            System.out.print("请输入1购买商品,输入2查看购物车,输入3结算,输入0退出购买:");
+            System.out.print("请输入1购买商品,输入2查看购物车,输入3结算,输入4切换账户,输入0退出购买:");
             int control = sc.nextInt();
             if (control==0){
                 System.out.println("期待您的下次光临！");
@@ -50,6 +50,8 @@ public class Shop {
                 login.getUser().checkSC();
             }else if (control==3){
                 login.getUser().pay();
+            }else if (control==4){
+                login.login();
             }else{
                 System.out.println("您的输入有误");
             }

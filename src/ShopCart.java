@@ -4,7 +4,7 @@ import java.security.PrivateKey;
  * @Author: butcher
  * @Date: 2020/12/27/18:05
  */
-public class ShoppingCar {
+public class ShopCart {
     private int count;
     private int amount;
 
@@ -14,7 +14,7 @@ public class ShoppingCar {
 
     private Product [] blank;
 
-    public ShoppingCar( int num) {
+    public ShopCart(int num) {
         this.blank = new Product[num];
     }
 

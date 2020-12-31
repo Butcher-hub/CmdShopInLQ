@@ -4,7 +4,7 @@ public class User {
     private String address;
     private String phone;
     private double money;
-    ShoppingCar shoppingCar = new ShoppingCar(10);
+    ShopCart shopCart = new ShopCart(10);
     /**
      * 用户购买行为
      * @param product
@@ -14,35 +14,35 @@ public class User {
             System.out.println("你钱不够，无法购买"+product.getPname());
             return;
         }
-        shoppingCar.add(product,count);
+        shopCart.add(product,count);
     }
 
     /**
      * 用户查看购物车
      */
     public void checkSC(){
-        if (shoppingCar.getBlank()[0]==null){
+        if (shopCart.getBlank()[0]==null){
             System.out.println("您的购物车空空如也！");
             return;
         }
-        shoppingCar.showList();
+        shopCart.showList();
     }
 
     public void pay(){
-        if (shoppingCar.getAmount()==0){
+        if (shopCart.getAmount()==0){
             System.out.println("你购物车没有东西哦，先去买点吧！");
             return;
         }
         ControlExcel controlExcel = new ControlExcel();
-        controlExcel.changeMoney(username,shoppingCar.getAmount());
+        controlExcel.changeMoney(username, shopCart.getAmount());
         System.out.println("付款成功");
 
-        for (Product p:shoppingCar.getBlank()) {
+        for (Product p: shopCart.getBlank()) {
             if(p==null){
-                controlExcel.addOrder(username,phone,address,shoppingCar.getBlank(),shoppingCar.getCount(),shoppingCar.getAmount());
+                controlExcel.addOrder(username,phone,address, shopCart.getBlank(), shopCart.getCount(), shopCart.getAmount());
                 System.out.println("商品信息已更新！订单生成完毕！");
                 //清空购物车
-                shoppingCar.freeIt();
+                shopCart.freeIt();
                 break;
             }
             controlExcel.changeProduct(p.getPid(),p.getUcount());

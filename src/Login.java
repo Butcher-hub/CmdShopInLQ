@@ -17,7 +17,6 @@ public class Login {
         while (flag) {
             System.out.print("请输入用户名：");
             String username = sc.next();
-
             System.out.print("请输入密码：");
             String password = sc.next();
             for (User u : users) {
@@ -30,7 +29,6 @@ public class Login {
             }
             if (!flag){
                 System.out.println("登录成功");
-
                 break;
             }else {
                 System.out.println("您的用户名密码不正确，请重新输入");
