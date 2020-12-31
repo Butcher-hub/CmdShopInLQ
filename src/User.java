@@ -1,9 +1,22 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class User {
     private String username;
     private String password;
     private String address;
     private String phone;
     private double money;
+    private String  id;
+
+    public String  getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     ShopCart shopCart = new ShopCart(10);
     /**
      * 用户购买行为
@@ -39,7 +52,10 @@ public class User {
 
         for (Product p: shopCart.getBlank()) {
             if(p==null){
-                controlExcel.addOrder(username,phone,address, shopCart.getBlank(), shopCart.getCount(), shopCart.getAmount());
+                Date date = new Date();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
+                controlExcel.addOrder(simpleDateFormat.format(date),shopCart.getBlank(), shopCart.getCount(), shopCart.getAmount());
+                controlExcel.addOrderWithUser(simpleDateFormat.format(date),id);
                 System.out.println("商品信息已更新！订单生成完毕！");
                 //清空购物车
                 shopCart.freeIt();

@@ -51,11 +51,13 @@ public class ShopCart {
     }
 
     public void freeIt(){
-       /* for (Product p : blank) {
+        /*for (Product p : blank) {
             if (p!=null){
                 p=null;
             }
         }*/
+
+//        增强for不可以通过下表获取对应的数组对象
         for (int i = 0; i <blank.length ; i++) {
             if (blank[i]!=null){
                 blank[i]=null;

@@ -5,18 +5,22 @@ import java.util.Scanner;
  * @Date: 2020/12/27/16:00
  */
 public class Shop {
+
     Product [] products;
 
+    public Shop() {
+        ControlExcel controlExcel  =new ControlExcel();
+        this.products = controlExcel.readProductExcel("product.xlsx");
+    }
 
     public static void main(String[] args) {
         Shop shop = new Shop();
         Login login = new Login();
         login.login();//用户已产生
-        ControlExcel controlExcel  =new ControlExcel();
-        shop.products  = controlExcel.readProductExcel("product.xlsx");
 
         Scanner sc = new Scanner(System.in);
         showProduct(shop.products);
+
         while(true) {
             System.out.print("请输入1购买商品,输入2查看购物车,输入3结算,输入4切换账户,输入0退出购买:");
             int control = sc.nextInt();

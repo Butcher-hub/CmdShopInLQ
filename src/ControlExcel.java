@@ -62,15 +62,18 @@ public class ControlExcel {
 
                     if (cell == null)
                         continue;
-                    if (k == 0) {
+
+                    if (k==0){
+                        user.setId(this.getValue(cell));
+                    }else if (k == 1) {
                         user.setUsername(this.getValue(cell));
-                    } else if (k == 1) {
-                        user.setPassword(this.getValue(cell));
                     } else if (k == 2) {
-                        user.setAddress(this.getValue(cell));
+                        user.setPassword(this.getValue(cell));
                     } else if (k == 3) {
+                        user.setAddress(this.getValue(cell));
+                    } else if (k == 4) {
                         user.setPhone(this.getValue(cell));
-                    }else if(k == 4){
+                    }else if(k == 5){
                         user.setMoney(Double.parseDouble(this.getValue(cell)));
                     }
                     users[j-1]=user;
@@ -188,25 +191,45 @@ public class ControlExcel {
         }
     }
 
+    public  void addOrderWithUser(String oid,String uid){
+        try {
+            FileInputStream fis = new FileInputStream(new File("UsersAndOder.xlsx"));
+            XSSFWorkbook xw = new XSSFWorkbook(fis);
+            //获取工作表
+            XSSFSheet xs = xw.getSheetAt(0);
+            //获取有效数据的最后一行
+            int index = xs.getLastRowNum()+1;
+            XSSFRow row = xs.createRow(index);
+            for (int i = 0; i <2 ; i++) {
+                if (i==0){
+                    row.createCell(i).setCellValue(oid);
+                }else if(i==1){
+                    row.createCell(i).setCellValue(uid);
+                }
+            }
+            fis.close();
+            FileOutputStream fos = new FileOutputStream(new File("UsersAndOder.xlsx"));
+            xw.write(fos);
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-    public  void addOrder(String name,String phone,String adsress,Product [] products,int count,double amount){
+
+    public  void addOrder(String id,Product [] products,int count,double amount){
         try {
             FileInputStream fis = new FileInputStream(new File("order.xlsx"));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
 
             XSSFCellStyle alignStyle = (XSSFCellStyle) xw.createCellStyle();
             alignStyle.setAlignment(HorizontalAlignment.CENTER);//水平居中
-
-
             //获取工作表
             XSSFSheet xs = xw.getSheetAt(0);
 
-            Date date = new Date();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
-
             //获取有数据的行数并创建行
             int rowindex =0;
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 3; i++) {
                 rowindex =xs.getLastRowNum()+1;
 
                 XSSFRow row = xs.createRow(rowindex);
@@ -216,25 +239,12 @@ public class ControlExcel {
                     if (i==0&&j==0){
                         cell.setCellValue("订单编号:");
                     }else if (i==0&&j==1){
-                        cell.setCellValue(simpleDateFormat.format(date));
+                        cell.setCellValue(id);
                     }else if (i==1&&j==0){
-                        cell.setCellValue("客户姓名");
-
-                    }else if (i==1&&j==1){
-                        cell.setCellValue("电话");
-                    }else if (i==1&&j==2){
-                        cell.setCellValue("发货地址");
-                    }else if (i==2&&j==0){
-                        cell.setCellValue(name);
-                    }else if (i==2&&j==1){
-                        cell.setCellValue(phone);
-                    }else if (i==2&&j==2){
-                        cell.setCellValue(adsress);
-                    }else if (i==3&&j==0){
                         cell.setCellValue("商品");
-                    }else if (i==3&&j==1){
+                    }else if (i==1&&j==1){
                         cell.setCellValue("数量");
-                    }else if (i==3&&j==2){
+                    }else if (i==1&&j==2) {
                         cell.setCellValue("价格");
                     }
                 }
@@ -245,7 +255,6 @@ public class ControlExcel {
                     break;
                 }
                 XSSFRow row = xs.createRow(rowindex++);
-
                 for (int i = 0; i <3 ; i++) {
                     XSSFCell cell = row.createCell(i);
                     cell.setCellStyle(alignStyle);
@@ -268,7 +277,6 @@ public class ControlExcel {
             cell2.setCellStyle(alignStyle);
             cell3.setCellValue(amount);
             cell3.setCellStyle(alignStyle);
-
 
             XSSFRow row = xs.createRow(rowindex++);
             for (int i = 0; i <3 ; i++) {
