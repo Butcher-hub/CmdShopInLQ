@@ -1,57 +1,31 @@
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.*;
-
 import java.io.*;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ControlExcel {
-
 
     User users[] = null;
     Product products[] = null;
 
-
     /**
-     * 创建Excel的方法
-     * @param url 创建的路径与文件名
-     */
-    public void createExcel(String url){
-        try {
-            //创建users工作表
-            Workbook usersWork = new HSSFWorkbook();  // or new XSSFWorkbook();
-            Sheet sheet1 = usersWork.createSheet("users");
-            FileOutputStream fileOut = new FileOutputStream(url);
-            usersWork.write(fileOut);
-            fileOut.close();
-            System.out.println(url+"创建完成");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 读取Excel的方法
+     * 读取用户Excel的方法
      * @param url 文件路径
-     * @param
      * @return 用户数组
      */
     public User[] readUserExcel(String url) {
         FileInputStream fis;
-//        声明一个用户数值
 
         try {
             fis = new FileInputStream(new File(url));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
             //获取工作表
             XSSFSheet xs = xw.getSheetAt(0);
-            //获取有数据的行数
+            //通过获取用户表中的用户行数，创建用户数组
             users = new User[xs.getLastRowNum()];
 
             for (int j = 1; j <= xs.getLastRowNum(); j++) {
@@ -86,16 +60,19 @@ public class ControlExcel {
         return users;
     }
 
+    /**
+     * 读取商品excel的方法
+     * @param url 商品文件的地址
+     * @return 商品数组
+     */
     public Product [] readProductExcel(String url) {
-//        声明一个用户数值
        FileInputStream fis;
 
         try {
             fis = new FileInputStream(new File(url));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
-            //获取工作表
             XSSFSheet xs = xw.getSheetAt(0);
-            //获取有数据的行数
+            //创建商品数组
             products = new Product[xs.getLastRowNum()];
 
             for (int j = 1; j <= xs.getLastRowNum(); j++) {
@@ -124,6 +101,11 @@ public class ControlExcel {
         return products;
     }
 
+    /**
+     * 修改商品表中商品的信息
+     * @param id 商品编号
+     * @param num 减少的数量
+     */
     public void changeProduct(String id,int num){
         try {
             FileInputStream fis = new FileInputStream(new File("product.xlsx"));
@@ -137,13 +119,11 @@ public class ControlExcel {
                     XSSFCell cell = row.getCell(3);
                     int count = Integer.parseInt(this.getValue(cell));
                     count-=num;
-
                     if(count<0){
                         System.out.println("对不起！您购买的"+this.getValue(row.getCell(1))+"库存不足！请减少购买量");
                         return;
                     }
                     cell.setCellValue(count);
-
                 }
             }
 
@@ -156,13 +136,16 @@ public class ControlExcel {
         }
     }
 
+    /**
+     * 修改用户的余额的方法
+     * @param name 用户姓名
+     * @param cost 减少的钱数
+     */
     public  void changeMoney(String name,int cost){
         try {
             FileInputStream fis = new FileInputStream(new File("Users.xlsx"));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
-            //获取工作表
             XSSFSheet xs = xw.getSheetAt(0);
-            //获取有数据的行数
             for (int j = 1; j <= xs.getLastRowNum(); j++) {
                 XSSFRow row = xs.getRow(j);
                 if (getValue(row.getCell(0)).equals(name)){
@@ -191,13 +174,16 @@ public class ControlExcel {
         }
     }
 
+    /**
+     * 绑定订单与用户的方法
+     * @param oid 订单编号
+     * @param uid 用户编号
+     */
     public  void addOrderWithUser(String oid,String uid){
         try {
             FileInputStream fis = new FileInputStream(new File("UsersAndOder.xlsx"));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
-            //获取工作表
             XSSFSheet xs = xw.getSheetAt(0);
-            //获取有效数据的最后一行
             int index = xs.getLastRowNum()+1;
             XSSFRow row = xs.createRow(index);
             for (int i = 0; i <2 ; i++) {
@@ -216,18 +202,21 @@ public class ControlExcel {
         }
     }
 
-
+    /**
+     * 添加订单的方法
+     * @param id 订单编号
+     * @param products 商品数组
+     * @param count 商品总数
+     * @param amount 商品总额
+     */
     public  void addOrder(String id,Product [] products,int count,double amount){
         try {
             FileInputStream fis = new FileInputStream(new File("order.xlsx"));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
 
-            XSSFCellStyle alignStyle = (XSSFCellStyle) xw.createCellStyle();
+            XSSFCellStyle alignStyle =xw.createCellStyle();
             alignStyle.setAlignment(HorizontalAlignment.CENTER);//水平居中
-            //获取工作表
             XSSFSheet xs = xw.getSheetAt(0);
-
-            //获取有数据的行数并创建行
             int rowindex =0;
             for (int i = 0; i < 3; i++) {
                 rowindex =xs.getLastRowNum()+1;
@@ -291,6 +280,11 @@ public class ControlExcel {
         }
     }
 
+    /**
+     * 获取excel表中值的方法
+     * @param cell
+     * @return
+     */
     private static String getValue(XSSFCell cell) {
         String value;
         CellType type = cell.getCellTypeEnum();

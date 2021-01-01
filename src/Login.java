@@ -8,6 +8,9 @@ public class Login {
         return user;
     }
 
+    /**
+     * 登录系统的方法
+     */
     public void login()  {
         boolean flag = true;
         ControlExcel controlExcel  =new ControlExcel();

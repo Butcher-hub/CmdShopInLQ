@@ -9,18 +9,16 @@ public class User {
     private double money;
     private String  id;
 
-    public String  getId() {
-        return id;
-    }
-
     public void setId(String id) {
         this.id = id;
     }
 
     ShopCart shopCart = new ShopCart(10);
+
     /**
      * 用户购买行为
-     * @param product
+     * @param product 商品
+     * @param count 数量
      */
     public void buy(Product product,int count){
         if(money< product.getPprice()){
@@ -41,6 +39,9 @@ public class User {
         shopCart.showList();
     }
 
+    /**
+     * 用户支付方法
+     */
     public void pay(){
         if (shopCart.getAmount()==0){
             System.out.println("你购物车没有东西哦，先去买点吧！");
@@ -67,7 +68,6 @@ public class User {
     }
 
 
-
     public String getUsername() {
         return username;
     }
@@ -92,16 +92,8 @@ public class User {
         this.money = money;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
     }
 
     public void setPhone(String phone) {

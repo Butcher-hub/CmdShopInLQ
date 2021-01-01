@@ -1,5 +1,4 @@
 import java.util.Scanner;
-
 /**
  * @Author: butcher
  * @Date: 2020/12/27/16:00
@@ -8,6 +7,10 @@ public class Shop {
 
     Product [] products;
 
+    /**
+     * 商店构造方法
+     * 在创建一个商店时，加载商店中的商品
+     */
     public Shop() {
         ControlExcel controlExcel  =new ControlExcel();
         this.products = controlExcel.readProductExcel("product.xlsx");
@@ -61,6 +64,11 @@ public class Shop {
             }
         }
     }
+
+    /**
+     * 显示商店中商品的方法
+     * @param products 商品数组
+     */
     public static void showProduct(Product [] products){
         System.out.printf("%15s\n","商品清单");
         System.out.println("|-----------------------------|");
