@@ -23,7 +23,7 @@ public class Login {
             System.out.print("请输入密码：");
             String password = sc.next();
             for (User u : users) {
-                if (username.equals(u.getUsername())) {
+                if (u.getUsername().equals(username)) {//用户找到
                     if (password.equals(u.getPassword())){
                         flag = false;
                         System.out.println("登录成功");
@@ -31,12 +31,8 @@ public class Login {
                         user=u;//用户初始化
                         break;
                     }else{
-                        System.out.println(u.getUsername()+"的密码错误,请重新输入");
-                        break;
+                        System.out.println("错误,请重新输入");
                     }
-                }else {
-                    System.out.println("对不起，无此用户！请重新输入");
-                    break;
                 }
             }
             if (!flag){

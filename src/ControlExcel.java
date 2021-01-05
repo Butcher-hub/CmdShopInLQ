@@ -1,9 +1,7 @@
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.*;
+
 import java.io.*;
 import java.text.DecimalFormat;
 
@@ -14,6 +12,7 @@ public class ControlExcel {
 
     /**
      * 读取用户Excel的方法
+     *
      * @param url 文件路径
      * @return 用户数组
      */
@@ -37,9 +36,9 @@ public class ControlExcel {
                     if (cell == null)
                         continue;
 
-                    if (k==0){
+                    if (k == 0) {
                         user.setId(this.getValue(cell));
-                    }else if (k == 1) {
+                    } else if (k == 1) {
                         user.setUsername(this.getValue(cell));
                     } else if (k == 2) {
                         user.setPassword(this.getValue(cell));
@@ -47,10 +46,10 @@ public class ControlExcel {
                         user.setAddress(this.getValue(cell));
                     } else if (k == 4) {
                         user.setPhone(this.getValue(cell));
-                    }else if(k == 5){
+                    } else if (k == 5) {
                         user.setMoney(Double.parseDouble(this.getValue(cell)));
                     }
-                    users[j-1]=user;
+                    users[j - 1] = user;
                 }
             }
             fis.close();
@@ -62,11 +61,12 @@ public class ControlExcel {
 
     /**
      * 读取商品excel的方法
+     *
      * @param url 商品文件的地址
      * @return 商品数组
      */
-    public Product [] readProductExcel(String url) {
-       FileInputStream fis;
+    public Product[] readProductExcel(String url) {
+        FileInputStream fis;
 
         try {
             fis = new FileInputStream(new File(url));
@@ -91,7 +91,7 @@ public class ControlExcel {
                     } else if (k == 3) {
                         product.setPcount(Integer.parseInt(this.getValue(cell)));
                     }
-                    products[j-1]=product;
+                    products[j - 1] = product;
                 }
             }
             fis.close();
@@ -103,10 +103,11 @@ public class ControlExcel {
 
     /**
      * 修改商品表中商品的信息
-     * @param id 商品编号
+     *
+     * @param id  商品编号
      * @param num 减少的数量
      */
-    public void changeProduct(String id,int num){
+    public void changeProduct(String id, int num) {
         try {
             FileInputStream fis = new FileInputStream(new File("product.xlsx"));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
@@ -115,12 +116,12 @@ public class ControlExcel {
             //获取有数据的行数
             for (int j = 1; j <= xs.getLastRowNum(); j++) {
                 XSSFRow row = xs.getRow(j);
-                if (this.getValue(row.getCell(0)).equals(id)){
+                if (this.getValue(row.getCell(0)).equals(id)) {
                     XSSFCell cell = row.getCell(3);
                     int count = Integer.parseInt(this.getValue(cell));
-                    count-=num;
-                    if(count<0){
-                        System.out.println("对不起！您购买的"+this.getValue(row.getCell(1))+"库存不足！请减少购买量");
+                    count -= num;
+                    if (count < 0) {
+                        System.out.println("对不起！您购买的" + this.getValue(row.getCell(1)) + "库存不足！请减少购买量");
                         return;
                     }
                     cell.setCellValue(count);
@@ -138,30 +139,27 @@ public class ControlExcel {
 
     /**
      * 修改用户的余额的方法
+     *
      * @param name 用户姓名
      * @param cost 减少的钱数
      */
-    public  void changeMoney(String name,int cost){
+    public void changeMoney(String name, int cost) {
         try {
             FileInputStream fis = new FileInputStream(new File("Users.xlsx"));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
             XSSFSheet xs = xw.getSheetAt(0);
             for (int j = 1; j <= xs.getLastRowNum(); j++) {
                 XSSFRow row = xs.getRow(j);
-                if (getValue(row.getCell(0)).equals(name)){
-                    XSSFCell cell = row.getCell(4);
+                if (getValue(row.getCell(1)).equals(name)) {
+                    XSSFCell cell = row.getCell(5);
                     int money = Integer.parseInt(getValue(cell));
-                    money-=cost;
-                    if(money<=0){
+                    money -= cost;
+                    if (money <= 0) {
                         System.out.println("对不起！您余额不足。。。");
+                        return;
                     }
                     cell.setCellValue(money);
                     System.out.println("交易成功");
-                    System.out.println("您的信息:");
-                    System.out.println("姓名："+row.getCell(0).getStringCellValue());
-                    System.out.println("地址："+row.getCell(2).getStringCellValue());
-                    System.out.println("电话："+getValue(row.getCell(3)));
-                    System.out.println("余额："+row.getCell(4).getNumericCellValue());
                 }
 
             }
@@ -176,25 +174,26 @@ public class ControlExcel {
 
     /**
      * 绑定订单与用户的方法
+     *
      * @param oid 订单编号
      * @param uid 用户编号
      */
-    public  void addOrderWithUser(String oid,String uid){
+    public void addOrderWithProduct(String oid, String uid) {
         try {
-            FileInputStream fis = new FileInputStream(new File("UsersAndOder.xlsx"));
+            FileInputStream fis = new FileInputStream(new File("productAndOder.xlsx"));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
             XSSFSheet xs = xw.getSheetAt(0);
-            int index = xs.getLastRowNum()+1;
+            int index = xs.getLastRowNum() + 1;
             XSSFRow row = xs.createRow(index);
-            for (int i = 0; i <2 ; i++) {
-                if (i==0){
+            for (int i = 0; i < 2; i++) {
+                if (i == 0) {
                     row.createCell(i).setCellValue(oid);
-                }else if(i==1){
+                } else if (i == 1) {
                     row.createCell(i).setCellValue(uid);
                 }
             }
             fis.close();
-            FileOutputStream fos = new FileOutputStream(new File("UsersAndOder.xlsx"));
+            FileOutputStream fos = new FileOutputStream(new File("productAndOder.xlsx"));
             xw.write(fos);
             fos.close();
         } catch (IOException e) {
@@ -204,73 +203,25 @@ public class ControlExcel {
 
     /**
      * 添加订单的方法
-     * @param id 订单编号
-     * @param products 商品数组
-     * @param count 商品总数
-     * @param amount 商品总额
      */
-    public  void addOrder(String id,Product [] products,int count,double amount){
+    public void addOrder(Order order) {
         try {
             FileInputStream fis = new FileInputStream(new File("order.xlsx"));
             XSSFWorkbook xw = new XSSFWorkbook(fis);
 
-            XSSFCellStyle alignStyle =xw.createCellStyle();
+            XSSFCellStyle alignStyle = xw.createCellStyle();
             alignStyle.setAlignment(HorizontalAlignment.CENTER);//水平居中
             XSSFSheet xs = xw.getSheetAt(0);
-            int rowindex =0;
-            for (int i = 0; i < 3; i++) {
-                rowindex =xs.getLastRowNum()+1;
+            int rowindex = 0;
+            rowindex = xs.getLastRowNum() + 1;
 
-                XSSFRow row = xs.createRow(rowindex);
-                for (int j = 0;j<3;j++){
-                    XSSFCell cell = row.createCell(j);
-                    cell.setCellStyle(alignStyle);
-                    if (i==0&&j==0){
-                        cell.setCellValue("订单编号:");
-                    }else if (i==0&&j==1){
-                        cell.setCellValue(id);
-                    }else if (i==1&&j==0){
-                        cell.setCellValue("商品");
-                    }else if (i==1&&j==1){
-                        cell.setCellValue("数量");
-                    }else if (i==1&&j==2) {
-                        cell.setCellValue("价格");
-                    }
-                }
-            }
-//                模板生成完毕，导入商品数据
-            for (int j =0; j <products.length ; j++) {
-                if (products[j]==null){
-                    break;
-                }
-                XSSFRow row = xs.createRow(rowindex++);
-                for (int i = 0; i <3 ; i++) {
-                    XSSFCell cell = row.createCell(i);
-                    cell.setCellStyle(alignStyle);
-                    if (i==0){
-                        cell.setCellValue(products[j].getPname());
-                    }else if(i==1){
-                        cell.setCellValue(products[j].getUcount());
-                    }else if(i==2){
-                        cell.setCellValue(products[j].getPprice());
-                    }
-                }
-            }
-            XSSFRow row1 = xs.createRow(rowindex++);
-            XSSFCell cell1 = row1.createCell(0);
-            XSSFCell cell2 = row1.createCell(1);
-            XSSFCell cell3 = row1.createCell(2);
-            cell1.setCellStyle(alignStyle);
-            cell1.setCellValue("总计：");
-            cell2.setCellValue(count);
-            cell2.setCellStyle(alignStyle);
-            cell3.setCellValue(amount);
-            cell3.setCellStyle(alignStyle);
+            XSSFRow row = xs.createRow(rowindex);
+            row.createCell(0).setCellValue(order.getId());//订单编号
+            row.createCell(1).setCellValue(order.getUser().getId());//用户编号
+            row.createCell(2).setCellValue(order.getUser().shopCart.getCount());//商品数量
+            row.createCell(3).setCellValue(order.getUser().shopCart.getAmount());//商品总价
+            row.createCell(4).setCellValue(order.getCreateTime());//创建时间
 
-            XSSFRow row = xs.createRow(rowindex++);
-            for (int i = 0; i <3 ; i++) {
-                row.createCell(i).setCellValue("--------------------");
-            }
             fis.close();
             FileOutputStream fos = new FileOutputStream(new File("order.xlsx"));
             xw.write(fos);
@@ -282,6 +233,7 @@ public class ControlExcel {
 
     /**
      * 获取excel表中值的方法
+     *
      * @param cell
      * @return
      */
