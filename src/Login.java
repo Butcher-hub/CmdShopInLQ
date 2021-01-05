@@ -23,18 +23,24 @@ public class Login {
             System.out.print("请输入密码：");
             String password = sc.next();
             for (User u : users) {
-                if (username.equals(u.getUsername()) && password.equals(u.getPassword())) {
-                    flag = false;
-                    System.out.println("您的账户余额为："+u.getMoney());
-                    user=u;//用户初始化
+                if (username.equals(u.getUsername())) {
+                    if (password.equals(u.getPassword())){
+                        flag = false;
+                        System.out.println("登录成功");
+                        System.out.println("您的账户余额为："+u.getMoney());
+                        user=u;//用户初始化
+                        break;
+                    }else{
+                        System.out.println(u.getUsername()+"的密码错误,请重新输入");
+                        break;
+                    }
+                }else {
+                    System.out.println("对不起，无此用户！请重新输入");
                     break;
                 }
             }
             if (!flag){
-                System.out.println("登录成功");
                 break;
-            }else {
-                System.out.println("您的用户名密码不正确，请重新输入");
             }
         }
     }
